@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { WorkoutDetails } from '../components/WorkoutDetails';
+import { WorkoutForm } from './../components/WorkoutForm';
 
 const Home = () => {
-  const [workouts, setWorkouts] = useState(null);
+  const [workouts, setWorkouts] = useState(null); //setting default and assigning values
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -15,7 +16,7 @@ const Home = () => {
     };
 
     fetchWorkouts();
-  }, [])
+  }, []) //the empty array after the useEffect function settles that it will run once!
 
   return (
     <div className="home">
@@ -25,6 +26,8 @@ const Home = () => {
             <WorkoutDetails key={workout._id} workout={workout} />
           ))}
       </div>
+
+        <WorkoutForm />
     </div>
   );
 };
