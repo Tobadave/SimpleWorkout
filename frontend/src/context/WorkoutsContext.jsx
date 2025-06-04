@@ -17,7 +17,7 @@ export const workoutReducer = (state, action) => {
 
 export const WorkoutContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(workoutReducer, { 
-    workouts: []  // Initialize with empty array
+    workouts: [] // Initialize with empty array instead of null
   });
 
   return (
@@ -27,4 +27,4 @@ export const WorkoutContextProvider = ({ children }) => {
   );
 };
 
-export default Home;
+export default WorkoutsContext;
