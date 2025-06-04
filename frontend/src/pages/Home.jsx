@@ -1,22 +1,27 @@
-import { useEffect, useState } from 'react';
-import { WorkoutDetails } from '../components/WorkoutDetails';
-import { WorkoutForm } from './../components/WorkoutForm';
+import { useEffect } from 'react';
+import WorkoutDetails from '../components/WorkoutDetails'
+import WorkoutForm from '../components/WorkoutForm';
+import { useWorkoutContext } from '../hooks/useWorkoutContext';
+// import { WorkoutContextProvider } from './context/WorkoutContext';
 
 const Home = () => {
-  const [workouts, setWorkouts] = useState(null); //setting default and assigning values
+  const { state, dispatch } = useWorkoutContext();
+  const { workouts } = state;
+
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       const response = await fetch('http://localhost:4000/api/workouts');
-      const json = await response.json()
+      const json = await response.json();
 
       if (response.ok) {
-        setWorkouts(json)
+        console.log(json); // Debug log
+        dispatch({ type: 'SET_WORKOUTS', payload: json });
       }
     };
 
     fetchWorkouts();
-  }, []) //the empty array after the useEffect function settles that it will run once!
+  }, [dispatch]);
 
   return (
     <div className="home">
@@ -26,8 +31,9 @@ const Home = () => {
             <WorkoutDetails key={workout._id} workout={workout} />
           ))}
       </div>
-
-        <WorkoutForm />
+      <WorkoutForm />
+      
+      {/* {workouts && workouts.map(w => <div key={w._id}>{w.title}</div>)} */}
     </div>
   );
 };
