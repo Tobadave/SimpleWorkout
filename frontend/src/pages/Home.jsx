@@ -1,29 +1,40 @@
-import React, { createContext, useReducer } from 'react';
+import { useEffect } from 'react';
+import WorkoutDetails from '../components/WorkoutDetails'
+import WorkoutForm from '../components/WorkoutForm';
+import { useWorkoutContext } from '../hooks/useWorkoutContext';
 
-export const WorkoutsContext = createContext();
+const Home = () => {
+  const { state, dispatch } = useWorkoutContext();
+  const { workouts } = state;
 
-export const workoutReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_WORKOUTS':
-      return { workouts: action.payload };
-    case 'CREATE_WORKOUT':
-      return { workouts: [action.payload, ...state.workouts] };
-    case 'DELETE_WORKOUT':
-      return { workouts: state.workouts.filter(w => w._id !== action.payload._id) };
-    default:
-      return state;
-  }
-};
 
-export const WorkoutContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(workoutReducer, { 
-    workouts: []  // Initialize with empty array
-  });
+useEffect(() => {
+  const fetchWorkouts = async () => {
+    const response = await fetch('/api/workouts');
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: 'SET_WORKOUTS', payload: json });
+    }
+  };
+
+  fetchWorkouts();
+}, [dispatch]);
+
 
   return (
-    <WorkoutsContext.Provider value={{ ...state, dispatch }}>
-      {children}
-    </WorkoutsContext.Provider>
+    <div className="home">
+      <div className="workouts">
+        {workouts &&
+          workouts.map((workout) => (
+            <WorkoutDetails key={workout._id} workout={workout} />
+          ) 
+          )}
+      </div>
+      <WorkoutForm />
+      
+      {/* {workouts && workouts.map(w => <div key={w._id}>{w.title}</div>)} */}
+    </div>
   );
 };
 

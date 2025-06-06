@@ -10,6 +10,7 @@ export const WorkoutForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault() //stops the default action when the submit action triggered (page refresh)
+        
         const workout = {title, load, reps}
 
         const response = await fetch('/api/workouts', {
@@ -20,6 +21,7 @@ export const WorkoutForm = () => {
                 'Content-Type': 'application/json'
             }
         })
+        
         const json = await response.json()
         
         if(!response.ok) {
