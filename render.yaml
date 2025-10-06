@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: backend-service
+    name: workout-backend
     env: node
     rootDir: backend
     buildCommand: npm install
@@ -9,10 +9,10 @@ services:
     autoDeploy: true
 
   - type: web
-    name: frontend-service
+    name: workout-frontend
     env: node
     rootDir: frontend
     buildCommand: npm install && npm run build
-    startCommand: npx serve -s build
+    startCommand: npx serve -s dist
     plan: free
     autoDeploy: true
